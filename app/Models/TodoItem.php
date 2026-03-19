@@ -9,4 +9,19 @@ class TodoItem extends Model
 {
     /** @use HasFactory<\Database\Factories\TodoItemFactory> */
     use HasFactory;
+
+    public $casts = [
+        'is_completed' => 'boolean'
+    ];
+
+    public $hidden = [
+        'created_at',
+        'user_id',
+        'updated_at'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

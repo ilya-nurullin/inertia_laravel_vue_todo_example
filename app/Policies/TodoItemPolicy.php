@@ -13,7 +13,7 @@ class TodoItemPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,15 @@ class TodoItemPolicy
      */
     public function view(User $user, TodoItem $todoItem): bool
     {
-        return false;
+        return true;
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function toggle(User $user, TodoItem $todoItem): bool
+    {
+        return $user->id === $todoItem->user_id;
     }
 
     /**
@@ -29,7 +37,7 @@ class TodoItemPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +45,7 @@ class TodoItemPolicy
      */
     public function update(User $user, TodoItem $todoItem): bool
     {
-        return false;
+        return $user->id === $todoItem->user_id;
     }
 
     /**
@@ -45,7 +53,7 @@ class TodoItemPolicy
      */
     public function delete(User $user, TodoItem $todoItem): bool
     {
-        return false;
+        return $user->id === $todoItem->user_id;
     }
 
     /**
@@ -53,7 +61,7 @@ class TodoItemPolicy
      */
     public function restore(User $user, TodoItem $todoItem): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -61,6 +69,6 @@ class TodoItemPolicy
      */
     public function forceDelete(User $user, TodoItem $todoItem): bool
     {
-        return false;
+        return true;
     }
 }

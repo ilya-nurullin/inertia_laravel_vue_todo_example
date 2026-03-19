@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TodoItemController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -9,6 +10,10 @@ Route::inertia('/', 'Welcome', [
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+
+    Route::apiResource('todos', TodoItemController::class);
+
+    Route::post('todos/{todo}/toggle', [TodoItemController::class, 'toggle'])->name('todos.toggle');
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

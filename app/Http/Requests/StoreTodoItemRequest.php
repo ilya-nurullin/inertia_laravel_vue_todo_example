@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\TodoItem;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class StoreTodoItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->can('create', TodoItem::class);
     }
 
     /**
@@ -23,7 +24,7 @@ class StoreTodoItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'string', 'min:1'],
         ];
     }
 }

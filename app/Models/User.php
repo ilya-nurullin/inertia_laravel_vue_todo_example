@@ -31,4 +31,9 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    public function todoItems()
+    {
+        return $this->hasMany(TodoItem::class);
+    }
 }

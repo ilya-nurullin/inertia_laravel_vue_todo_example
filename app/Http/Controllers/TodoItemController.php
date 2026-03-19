@@ -13,15 +13,9 @@ class TodoItemController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $todoItems = auth()->user()->todoItems()->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return inertia("TodoApp", ['todos' => $todoItems]);
     }
 
     /**
@@ -29,38 +23,50 @@ class TodoItemController extends Controller
      */
     public function store(StoreTodoItemRequest $request)
     {
-        //
+        $user = auth()->user();
+
+        $todoItem = new TodoItem();
+        $todoItem->title = $request->title;
+        $todoItem->user_id = $user->id;
+        $todoItem->is_completed = false;
+        $todoItem->save();
+
+        return to_route('todos.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TodoItem $todoItem)
+    public function toggle(TodoItem $todo)
     {
-        //
+        if (auth()->user()->cannot('toggle', $todo)) {
+            return abort(404);
+        }
+
+        $todo->is_completed = !$todo->is_completed;
+        $todo->save();
+
+        return to_route('todos.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TodoItem $todoItem)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTodoItemRequest $request, TodoItem $todoItem)
+    public function update(UpdateTodoItemRequest $request, TodoItem $todo)
     {
-        //
+        if (auth()->user()->cannot('update', $todo)) {
+            return abort(404);
+        }
+
+        $todo->title = $request->title;
+        $todo->save();
+
+        return to_route('todos.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TodoItem $todoItem)
+    public function destroy(TodoItem $todo)
     {
-        //
+        $todo->delete();
     }
 }
